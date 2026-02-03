@@ -135,13 +135,11 @@ const result = document.getElementById("result");
 const question = document.getElementById("question");
 const music = document.getElementById("bgMusic");
 
+// Move NO button randomly
 function moveButton() {
-    const maxX = window.innerWidth - 150;
-    const maxY = window.innerHeight - 80;
-
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-
+    const randomX = Math.random() * (window.innerWidth - 150);
+    const randomY = Math.random() * (window.innerHeight - 80);
+    noBtn.style.position = "absolute";
     noBtn.style.left = randomX + "px";
     noBtn.style.top = randomY + "px";
 }
@@ -149,17 +147,28 @@ function moveButton() {
 noBtn.addEventListener("mouseover", moveButton);
 noBtn.addEventListener("click", moveButton);
 
-yesBtn.addEventListener("click", () => {
-    question.classList.add("hidden");
-    noBtn.classList.add("hidden");
-    yesBtn.classList.add("hidden");
-    result.classList.remove("hidden");
+yesBtn.addEventListener("click", function() {
 
-    // Play music
-    music.play();
+    // Hide question + buttons
+    question.style.display = "none";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
 
-    // Confetti burst
+    // Show result
+    result.style.display = "block";
+
+    // Play music (safe autoplay)
+    music.currentTime = 0;
+    music.play().catch(error => {
+        console.log("Autoplay blocked:", error);
+    });
+
+    // Confetti explosion
     confetti({
-        particleCount: 350,
+        particleCount: 300,
         spread: 140,
-        origin: {
+        origin: { y: 0.6 }
+    });
+
+});
+</script>
